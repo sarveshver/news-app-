@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'home.css' %}">
+   
+
+    <script src="{% static 'home.js' %}"></script>
+
+    <title>News Articles</title>
+
+</head>
+
+<body>
+    <div class="nav">
+        <nav class="navbar">
+            <ul class="nav-list">
+                <li><a href="{% url 'home' %}?category=technology">Technology</a></li>
+                <li><a href="{% url 'home' %}?category=health">Health</a></li>
+                <li><a href="{% url 'home' %}?category=Entertainment">Entertainment</a></li>
+                <li><a href="{% url 'home' %}?category=Sports">Sports</a></li>
+                <li><a href="{% url 'home' %}?category=Science">Science</a></li>
+                <li><a href="{% url 'home' %}?category=Business">Business</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <div style="margin-top: 1px;">
+
+        <div class="search">
+            <h1>NEWS ARTICLES</h1>
+            <form class="language-form" action="" method="get">
+                {% csrf_token %}
+                <select name="language" class="language-select">
+                    <option value="">All</option>
+                    <option value="en">English</option>
+                    <option value="es">Spanish</option>
+                    <option value="ar">Arabic</option>
+                    <option value="de">German</option>
+                    <option value="fr">French</option>
+                    <option value="it">Spanish</option>
+                    <option value="nl">Spanish</option>
+                    <option value="no">Spanish</option>
+                    <option value="pt">Spanish</option>
+                    <option value="ru">Russian</option>
+                    <option value="sv">Spanish</option>
+                    <option value="ud">Spanish</option>
+                    <!-- Add more language options as needed -->
+                </select>
+                <button type="submit" class="language-button">Apply</button>
+            </form>
+        </div>
+
+        <hr>
+
+        {% for i, article in articles %}
+            <div>
+                <h2>{{ article.author }}</h2>
+                <h4>{{ article.publishedAt }}</h4>
+                <p>{{ article.title }}</p>
+                <p>{{ article.description }}</p>
+
+                <img src="{{ article.urlToImage }}" alt="{{ article.title }}">
+
+                <div class="share-menu">
+                    <button class="share-btn">
+                        <i class="fas fa-share-alt"></i>
+                    </button>
+                    <div class="dropdown">
+                        <a href="#" target="_blank">
+                            <i class="fab fa-facebook-square"></i> Facebook
+                        </a>
+                        <a href="#" target="_blank">
+                            <i class="fab fa-twitter-square"></i> Twitter
+                        </a>
+                        <a href="#" target="_blank">
+                            <i class="fab fa-instagram-square"></i> Instagram
+                        </a>
+                    </div>
+                </div>
+
+                <button type="button" data-index="{{ i }}" class="post-comment">Post a Comment</button>
+
+
+                <div id="comments-{{ i }}">
+                    {% for comment in comments %}
+                        {% if comment.article_index == i %}
+                            <p>{{ comment.user_name }} - {{ comment.created_at }}</p>
+                            <p>{{ comment.comment_text }}</p>
+                            <hr>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <a href="{{ article.url }}" target="_blank">Read More</a>
+            </div>
+            <hr>
+        {% endfor %}
+    </div>
+</body>
+
+</html>
